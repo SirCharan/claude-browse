@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionEnd": [
+      {
+        "hooks": [
+          {"type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/bin/browse reap --quiet --idle-hours 6", "timeout": 20}
+        ]
+      }
+    ]
+  }
+}

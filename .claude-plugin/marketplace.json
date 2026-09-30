@@ -1,0 +1,8 @@
+{
+  "name": "claude-browse",
+  "owner": {"name": "Charandeep Kapoor"},
+  "metadata": {"description": "Token-cheap browsing for Claude Code: a Sonnet sub-agent drives agent-browser or browser-harness behind one router, with a session ledger, browse ls and a reaper.", "version": "0.1.0"},
+  "plugins": [
+    {"name": "claude-browse", "description": "Token-cheap browsing for Claude Code: a Sonnet sub-agent drives agent-browser or browser-harness behind one router, with a session ledger, browse ls and a reaper.", "source": "./", "category": "productivity"}
+  ]
+}
