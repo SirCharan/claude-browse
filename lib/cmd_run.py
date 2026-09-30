@@ -231,6 +231,10 @@ def cmd_adopt(ns):
             continue
         d = ledger.daemon_state(name)
         e = ledger.new_session(name, "legacy (unknown)", "agent-browser")
+        mt = ledger.daemon_mtime(name)
+        if mt:
+            iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(mt))
+            e["created"] = e["last_used"] = iso
         e.update(state="live" if d["alive"] else "closed", pid=d["pid"] or 0, daemon_version=d["version"])
         ledger.upsert(name, **e)
         count += 1
