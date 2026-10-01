@@ -1,6 +1,8 @@
-"""Tests for browse ls, reap and doctor."""
+"""Tests for browse ls, reap and check."""
 import argparse
 import contextlib
+import importlib.machinery
+import importlib.util
 import io
 import json
 import os
@@ -17,6 +19,8 @@ from unittest import mock
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "lib"))
 import ledger  # noqa: E402
 import cmd_admin  # noqa: E402
+
+ROOT = Path(__file__).resolve().parent.parent
 
 SHIM = """#!/bin/sh
 echo "$@" >> "$0.argv"
@@ -192,17 +196,23 @@ class ReapTest(unittest.TestCase):
         self.reap()
         self.assertEqual(ledger.get("gone")["state"], "closed")
 
-    def test_doctor(self):
+    def test_check(self):
         with mock.patch("urllib.request.urlopen", side_effect=OSError):
-            rc, o = run(cmd_admin.cmd_doctor)
+            rc, o = run(cmd_admin.cmd_check)
             self.assertEqual(rc, 0, o)
             self.assertIn("PASS agent-browser 0.38.1", o)
             self.assertIn("WARN version-mismatched daemons: mism", o)
             self.assertIn("browse reap --restart-mismatch", o)
             with mock.patch.object(ledger, "AB_BIN", str(self.tmp / "nope")):
-                rc, o = run(cmd_admin.cmd_doctor)
+                rc, o = run(cmd_admin.cmd_check)
             self.assertEqual(rc, 1)
             self.assertIn("FAIL agent-browser not found", o)
+
+    def test_doctor_alias(self):
+        spec = importlib.util.spec_from_loader("browse_cli", importlib.machinery.SourceFileLoader("browse_cli", str(ROOT / "bin" / "browse")))
+        cli = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cli)
+        self.assertEqual(cli.CMDS["doctor"], cli.CMDS["check"])
 
 
 if __name__ == "__main__":

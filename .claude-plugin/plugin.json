@@ -1,7 +1,7 @@
 {
   "name": "claude-browse",
   "version": "0.1.0",
-  "description": "Token-cheap browsing for Claude Code: a Sonnet sub-agent drives agent-browser or browser-harness behind one router, with a session ledger, browse ls and a reaper.",
+  "description": "Claude Browse gives Claude Code token-cheap browsing: a Sonnet sub-agent drives agent-browser or browser-harness behind one router, with a session ledger, browse ls and a reaper.",
   "author": {"name": "Charandeep Kapoor", "url": "https://charandeepkapoor.com"},
   "homepage": "https://charandeepkapoor.com/claude-browse",
   "repository": "https://github.com/SirCharan/claude-browse",

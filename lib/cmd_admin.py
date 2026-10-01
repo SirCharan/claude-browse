@@ -1,4 +1,4 @@
-"""Admin commands for claude-browse: ls, reap, doctor."""
+"""Admin commands for Claude Browse: ls, reap, check."""
 import json
 import os
 import shutil
@@ -158,7 +158,7 @@ def cmd_reap(ns):
     return 0
 
 
-def cmd_doctor(ns):
+def cmd_check(ns):
     """Run health checks, print PASS/WARN/FAIL lines, return 1 on any FAIL."""
     fails = 0
 

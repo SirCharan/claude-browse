@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""claude-browse CLI: session ledger wrapper around agent-browser and browser-harness."""
+"""Claude Browse CLI: session ledger wrapper around agent-browser and browser-harness."""
 import argparse
 import importlib
 import os
@@ -9,13 +9,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "..
 
 CMDS = {"open": ("cmd_run", "cmd_open"), "run": ("cmd_run", "cmd_run"), "log": ("cmd_run", "cmd_log"),
         "adopt": ("cmd_run", "cmd_adopt"), "ls": ("cmd_admin", "cmd_ls"),
-        "reap": ("cmd_admin", "cmd_reap"), "doctor": ("cmd_admin", "cmd_doctor")}
+        "reap": ("cmd_admin", "cmd_reap"), "check": ("cmd_admin", "cmd_check"), "doctor": ("cmd_admin", "cmd_check")}
 
 
 def build():
     """Build the argparse parser."""
     p = argparse.ArgumentParser(prog="browse", description="Session ledger for browser automation.")
-    sub = p.add_subparsers(dest="cmd", required=True)
+    sub = p.add_subparsers(dest="cmd", required=True, metavar="{open,run,ls,log,reap,check,adopt}")
     o = sub.add_parser("open", help="create a session")
     o.add_argument("name")
     o.add_argument("--purpose", required=True)
@@ -41,7 +41,8 @@ def build():
     rp.add_argument("--restart-mismatch", dest="restart_mismatch", action="store_true")
     rp.add_argument("--force", action="store_true")
     rp.add_argument("--quiet", action="store_true")
-    sub.add_parser("doctor", help="check binaries, versions and ledger")
+    sub.add_parser("check", help="check binaries, versions and ledger")
+    sub.add_parser("doctor")  # hidden alias for check
     sub.add_parser("adopt", help="register existing daemons")
     return p
 
