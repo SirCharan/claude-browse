@@ -37,7 +37,7 @@ Below, `browse` means whichever you located.
 
 Curl first: try `curl -sL` when the page is static or an API exists. Open a browser only if curl output is empty, JS-rendered, or blocked.
 
-Precondition for browser-harness: `curl -s 127.0.0.1:9222/json/version`. If it fails, report "enable Chrome remote debugging on 9222". Never silently fall back to agent-browser for an auth task.
+Precondition for browser-harness: `nc -z 127.0.0.1 9222 || grep -q . "$HOME/Library/Application Support/Google/Chrome/DevToolsActivePort"` (`/json/version` may 404 on Chrome 147+, that is not a failure). If it fails, report "enable Chrome remote debugging on 9222". Never silently fall back to agent-browser for an auth task.
 
 ## Loop (agent-browser)
 

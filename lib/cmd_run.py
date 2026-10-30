@@ -13,7 +13,21 @@ import ledger
 
 STACKS = {"ab": "agent-browser", "bh": "browser-harness"}
 NAV = ("open", "goto", "navigate")
-CDP = "http://127.0.0.1:9222/json/version"
+DEVTOOLS_PORT_FILE = os.path.expanduser("~/Library/Application Support/Google/Chrome/DevToolsActivePort")
+
+
+def cdp_up():
+    """Chrome 147+ 404s on /json/version, so check the TCP port or DevToolsActivePort."""
+    import socket
+    try:
+        socket.create_connection(("127.0.0.1", 9222), timeout=2).close()
+        return True
+    except OSError:
+        pass
+    try:
+        return os.path.getsize(DEVTOOLS_PORT_FILE) > 0
+    except OSError:
+        return False
 
 
 def _is_bh(entry):
@@ -102,9 +116,7 @@ def cmd_open(ns):
     entry = ledger.new_session(ns.name, ns.purpose, stack, ns.url, ns.profile,
                                _split(ns.allow_domains), _split(ns.allow_tools), ns.headed)
     if stack == "browser-harness":
-        try:
-            urllib.request.urlopen(CDP, timeout=2).close()
-        except Exception:
+        if not cdp_up():
             print("browser-harness: Chrome remote debugging not reachable on 9222. "
                   "Enable it (chrome://inspect/#remote-debugging) or use --stack ab.")
             return 4

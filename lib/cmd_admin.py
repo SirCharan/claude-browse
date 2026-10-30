@@ -176,10 +176,10 @@ def cmd_check(ns):
         out("PASS", "browser-harness on PATH")
     else:
         out("WARN", "browser-harness not found", "install browser-harness or set CLAUDE_BROWSE_BH_BIN")
-    try:
-        urllib.request.urlopen("http://127.0.0.1:9222/json/version", timeout=2).close()
+    from cmd_run import cdp_up
+    if cdp_up():
         out("PASS", "Chrome CDP 9222 reachable")
-    except Exception:
+    else:
         out("WARN", "Chrome CDP 9222 not reachable", "start Chrome with --remote-debugging-port=9222")
     try:
         if ledger.LEDGER.exists():
